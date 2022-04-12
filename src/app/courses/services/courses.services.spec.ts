@@ -4,7 +4,7 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import { COURSES, findLessonsForCourse, LESSONS } from "../../../../server/db-data"
 import { Course } from "../model/course"
 import { HttpErrorResponse } from "@angular/common/http"
-describe("CoursesService", ()=>{
+xdescribe("CoursesService", ()=>{
     let coursesService: CoursesService, httpTestingController:HttpTestingController
     beforeEach(()=>{
         TestBed.configureTestingModule({
