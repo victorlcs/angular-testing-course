@@ -12,6 +12,8 @@ import {By} from '@angular/platform-browser';
 import {of} from 'rxjs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {click} from '../common/test-utils';
+import { features } from 'process';
+
 
 
 
@@ -81,22 +83,39 @@ describe('HomeComponent', () => {
 
   });
 
-
-  xit("should display advanced courses when tab clicked", (done:DoneFn) => {
+  //With fakeAsync method
+  //This method is still preferred over waitForAync
+  //More convenient and less error
+  it("should display advanced courses when tab clicked - fakeAsync", fakeAsync(() => {
     coursesService.findAllCourses.and.returnValue(of(setupCourses()));
     fixture.detectChanges();
     const tabs = el.queryAll(By.css(".mat-tab-label"));
     click(tabs[1]);
     fixture.detectChanges();
-    setTimeout(() => {
+    flush();
+    fixture.detectChanges();
+    const cardTitles = el.queryAll(By.css('.mat-card-title'));
+    expect(cardTitles.length).toBeGreaterThan(0,"could not find card titles");
+    expect(cardTitles[0].nativeElement.textContent).toContain("Angular Security Course");
+  }));
+
+  //with waitForAsync method
+  //Only things that waitForAsync have is can perform real httpRequest to real backend/api
+  //Make sure the browser is not minimized when running this test
+  //"requestAnimationFrame() calls are paused in most browsers when running in background tabs or hidden <iframe>s in order to improve performance and battery life."
+  fit("should display advanced courses when tab clicked - waitForAsync", waitForAsync(() => {
+    coursesService.findAllCourses.and.returnValue(of(setupCourses()));
+    fixture.detectChanges();
+    const tabs = el.queryAll(By.css(".mat-tab-label"));
+    click(tabs[1]);
+    fixture.detectChanges();
+    fixture.whenStable().then(() =>{
+      fixture.detectChanges();
       const cardTitles = el.queryAll(By.css('.mat-card-title'));
     expect(cardTitles.length).toBeGreaterThan(0,"could not find card titles");
     expect(cardTitles[0].nativeElement.textContent).toContain("Angular Security Course");
-    done();
-    }, 500);
-    
-  });
-
+    })
+  }));
 });
 
 

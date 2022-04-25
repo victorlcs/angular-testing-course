@@ -92,7 +92,7 @@ describe("Async Testing Examples", ()=>{
     });
 
     //Example 7 //Testing Observable with delay
-    fit("Asynchronous test example - Observables", fakeAsync(()=>{
+    it("Asynchronous test example - Observables", fakeAsync(()=>{
         let test = false;
         console.log('Creating Observables');
         const test$ = of(test).pipe(delay(1000));
